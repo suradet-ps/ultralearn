@@ -137,4 +137,4 @@ GitHub Actions runs on every push and pull request to `main`. The workflow insta
 
 ## License
 
-This project is provided as-is for personal learning use.
+Licensed under the [MIT License](LICENSE).
