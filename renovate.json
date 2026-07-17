@@ -24,14 +24,6 @@
       "description": "Pin dev dependencies to exact versions",
       "matchDepTypes": ["devDependencies"],
       "rangeStrategy": "pin"
-    },
-    {
-      "description": "Auto-merge passing non-major npm updates",
-      "matchManagers": ["npm", "bun"],
-      "matchUpdateTypes": ["patch", "minor"],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true
     }
   ],
   "vulnerabilityAlerts": {
