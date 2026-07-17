@@ -1,5 +1,31 @@
-# Vue 3 + TypeScript + Vite
+# ultralearn
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Vue 3 + TypeScript + Vite project.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Prerequisites
+
+- [Bun](https://bun.sh) (package manager & runtime)
+
+## Setup
+
+```bash
+bun install
+```
+
+## Development
+
+```bash
+bun run dev
+```
+
+## Build
+
+Type-check and build the project:
+
+```bash
+bun run build
+```
+
+## CI
+
+GitHub Actions runs on every push and pull request to `main`, executing `bun run build` (type-check + build). See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
