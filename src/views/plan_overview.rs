@@ -10,98 +10,98 @@ use web_sys::wasm_bindgen::JsCast;
 
 #[component]
 pub fn PlanOverview() -> impl IntoView {
-    let store = use_plan();
-    let params = use_params_map();
-    let plan_id = Signal::derive(move || params.get().get("id").unwrap_or_default());
-    let navigate = use_navigate();
+  let store = use_plan();
+  let params = use_params_map();
+  let plan_id = Signal::derive(move || params.get().get("id").unwrap_or_default());
+  let navigate = use_navigate();
 
-    let progress = Signal::derive(move || store.get_progress(&plan_id.get()));
-    let editing = RwSignal::new(false);
-    let edit_topic = RwSignal::new(String::new());
-    let edit_goal = RwSignal::new(String::new());
-    let new_tag = RwSignal::new(String::new());
+  let progress = Signal::derive(move || store.get_progress(&plan_id.get()));
+  let editing = RwSignal::new(false);
+  let edit_topic = RwSignal::new(String::new());
+  let edit_goal = RwSignal::new(String::new());
+  let new_tag = RwSignal::new(String::new());
 
-    let navigate = StoredValue::new(navigate);
+  let navigate = StoredValue::new(navigate);
 
-    let go_back = Callback::new(move |_: web_sys::MouseEvent| {
-        navigate.with_value(|n| n("/", NavigateOptions::default()));
-    });
+  let go_back = Callback::new(move |_: web_sys::MouseEvent| {
+    navigate.with_value(|n| n("/", NavigateOptions::default()));
+  });
 
-    let delete = Callback::new(move |_: web_sys::MouseEvent| {
-        if web_sys::window()
-            .and_then(|w| {
-                w.confirm_with_message("Delete this plan? This cannot be undone.")
-                    .ok()
-            })
-            .unwrap_or(false)
-        {
-            let id = plan_id.get_untracked();
-            store.delete_plan(&id);
-            navigate.with_value(|n| n("/", NavigateOptions::default()));
-        }
-    });
+  let delete = Callback::new(move |_: web_sys::MouseEvent| {
+    if web_sys::window()
+      .and_then(|w| {
+        w.confirm_with_message("Delete this plan? This cannot be undone.")
+          .ok()
+      })
+      .unwrap_or(false)
+    {
+      let id = plan_id.get_untracked();
+      store.delete_plan(&id);
+      navigate.with_value(|n| n("/", NavigateOptions::default()));
+    }
+  });
 
-    let export = Callback::new(move |_: web_sys::MouseEvent| {
-        let id = plan_id.get_untracked();
-        let json = store.export_plan(&id);
-        if let Some(plan) = store.get_plan(&id)
-            && let Some(window) = web_sys::window()
-        {
-            let filename = format!("ultralearn-{}.json", slugify(&plan.topic));
-            let arr = js_sys::Array::of1(&json.into());
-            if let Ok(blob) = web_sys::Blob::new_with_str_sequence(&arr)
-                && let Ok(url) = web_sys::Url::create_object_url_with_blob(&blob)
-                && let Some(doc) = window.document()
-                && let Ok(anchor) = doc.create_element("a")
-                && let Ok(anchor) = anchor.dyn_into::<web_sys::HtmlAnchorElement>()
-            {
-                anchor.set_href(&url);
-                anchor.set_download(&filename);
-                anchor.click();
-                web_sys::Url::revoke_object_url(&url).ok();
-            }
-        }
-    });
+  let export = Callback::new(move |_: web_sys::MouseEvent| {
+    let id = plan_id.get_untracked();
+    let json = store.export_plan(&id);
+    if let Some(plan) = store.get_plan(&id)
+      && let Some(window) = web_sys::window()
+    {
+      let filename = format!("ultralearn-{}.json", slugify(&plan.topic));
+      let arr = js_sys::Array::of1(&json.into());
+      if let Ok(blob) = web_sys::Blob::new_with_str_sequence(&arr)
+        && let Ok(url) = web_sys::Url::create_object_url_with_blob(&blob)
+        && let Some(doc) = window.document()
+        && let Ok(anchor) = doc.create_element("a")
+        && let Ok(anchor) = anchor.dyn_into::<web_sys::HtmlAnchorElement>()
+      {
+        anchor.set_href(&url);
+        anchor.set_download(&filename);
+        anchor.click();
+        web_sys::Url::revoke_object_url(&url).ok();
+      }
+    }
+  });
 
-    let duplicate = Callback::new(move |_: web_sys::MouseEvent| {
-        let id = plan_id.get_untracked();
-        if let Some(new_plan) = store.duplicate_plan(&id) {
-            let new_id = new_plan.id.clone();
-            navigate.with_value(|n| n(&format!("/plan/{new_id}"), NavigateOptions::default()));
-        }
-    });
+  let duplicate = Callback::new(move |_: web_sys::MouseEvent| {
+    let id = plan_id.get_untracked();
+    if let Some(new_plan) = store.duplicate_plan(&id) {
+      let new_id = new_plan.id.clone();
+      navigate.with_value(|n| n(&format!("/plan/{new_id}"), NavigateOptions::default()));
+    }
+  });
 
-    let start_edit = Callback::new(move |_: web_sys::MouseEvent| {
-        if let Some(p) = store.get_plan(&plan_id.get_untracked()) {
-            edit_topic.set(p.topic.clone());
-            edit_goal.set(p.goal.clone());
-            editing.set(true);
-        }
-    });
+  let start_edit = Callback::new(move |_: web_sys::MouseEvent| {
+    if let Some(p) = store.get_plan(&plan_id.get_untracked()) {
+      edit_topic.set(p.topic.clone());
+      edit_goal.set(p.goal.clone());
+      editing.set(true);
+    }
+  });
 
-    let save_edit = Callback::new(move |_: web_sys::MouseEvent| {
-        let id = plan_id.get_untracked();
-        let t = edit_topic.get_untracked().trim().to_string();
-        if !t.is_empty() {
-            store.rename_plan(&id, &t);
-            store.update_plan_goal(&id, edit_goal.get_untracked().trim());
-        }
-        editing.set(false);
-    });
+  let save_edit = Callback::new(move |_: web_sys::MouseEvent| {
+    let id = plan_id.get_untracked();
+    let t = edit_topic.get_untracked().trim().to_string();
+    if !t.is_empty() {
+      store.rename_plan(&id, &t);
+      store.update_plan_goal(&id, edit_goal.get_untracked().trim());
+    }
+    editing.set(false);
+  });
 
-    let add_tag = Callback::new(move |()| {
-        let id = plan_id.get_untracked();
-        let t = new_tag.get_untracked();
-        if !t.trim().is_empty() {
-            store.add_tag(&id, &t);
-            new_tag.set(String::new());
-        }
-    });
+  let add_tag = Callback::new(move |()| {
+    let id = plan_id.get_untracked();
+    let t = new_tag.get_untracked();
+    if !t.trim().is_empty() {
+      store.add_tag(&id, &t);
+      new_tag.set(String::new());
+    }
+  });
 
-    let cards_view = move || {
-        let pid = plan_id.get();
-        let plan = store.get_plan(&pid);
-        match plan {
+  let cards_view = move || {
+    let pid = plan_id.get();
+    let plan = store.get_plan(&pid);
+    match plan {
             None => view! { <div class="not-found"><div class="container"><p>"Plan not found."</p><button class="btn btn-primary" on:click=move |ev| go_back.run(ev)>"Go back"</button></div></div> }.into_any(),
             Some(p) => {
                 let topic = p.topic.clone();
@@ -323,31 +323,31 @@ pub fn PlanOverview() -> impl IntoView {
                 .into_any()
             }
         }
-    };
+  };
 
-    // Keyboard shortcuts: digits 1-9 jump to the corresponding principle.
-    let nav = navigate;
-    Effect::new(move |_| {
-        let nav = nav;
-        let pid = plan_id;
-        window_event_listener(leptos::ev::keydown, move |ev: leptos::ev::KeyboardEvent| {
-            if crate::core::utils::is_typing(&ev) {
-                return;
-            }
-            if let Some(d) = ev.key().chars().next().and_then(|c| c.to_digit(10))
-                && (1..=9).contains(&d)
-            {
-                ev.prevent_default();
-                let id = pid.get_untracked();
-                nav.with_value(|n| {
-                    n(
-                        &format!("/plan/{id}/principle/{d}"),
-                        NavigateOptions::default(),
-                    );
-                });
-            }
+  // Keyboard shortcuts: digits 1-9 jump to the corresponding principle.
+  let nav = navigate;
+  Effect::new(move |_| {
+    let nav = nav;
+    let pid = plan_id;
+    window_event_listener(leptos::ev::keydown, move |ev: leptos::ev::KeyboardEvent| {
+      if crate::core::utils::is_typing(&ev) {
+        return;
+      }
+      if let Some(d) = ev.key().chars().next().and_then(|c| c.to_digit(10))
+        && (1..=9).contains(&d)
+      {
+        ev.prevent_default();
+        let id = pid.get_untracked();
+        nav.with_value(|n| {
+          n(
+            &format!("/plan/{id}/principle/{d}"),
+            NavigateOptions::default(),
+          );
         });
+      }
     });
+  });
 
-    view! { {cards_view} }
+  view! { {cards_view} }
 }

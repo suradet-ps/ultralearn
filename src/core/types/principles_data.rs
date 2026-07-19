@@ -1,18 +1,18 @@
 #[derive(Debug, Clone)]
 pub struct PrincipleData {
-    pub id: u32,
-    pub name: String,
-    pub tagline: String,
-    pub color: String,
-    pub description: String,
-    pub prompts: Vec<&'static str>,
+  pub id: u32,
+  pub name: String,
+  pub tagline: String,
+  pub color: String,
+  pub description: String,
+  pub prompts: Vec<&'static str>,
 }
 
 /// The 9 Ultralearning principles. Mirrors `src/types/principles-data.ts`.
 pub fn principles() -> &'static [PrincipleData] {
-    use std::sync::OnceLock;
-    static PRINCIPLES: OnceLock<Vec<PrincipleData>> = OnceLock::new();
-    PRINCIPLES.get_or_init(|| {
+  use std::sync::OnceLock;
+  static PRINCIPLES: OnceLock<Vec<PrincipleData>> = OnceLock::new();
+  PRINCIPLES.get_or_init(|| {
         vec![
             PrincipleData {
                 id: 1,
@@ -146,8 +146,8 @@ pub fn principles() -> &'static [PrincipleData] {
 
 /// Name lookup by id, mirrors the `getPrincipleName` helper in the landing view.
 pub fn principle_name(id: u32) -> &'static str {
-    principles()
-        .iter()
-        .find(|p| p.id == id)
-        .map_or("", |p| p.name.as_str())
+  principles()
+    .iter()
+    .find(|p| p.id == id)
+    .map_or("", |p| p.name.as_str())
 }

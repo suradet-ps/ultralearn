@@ -8,20 +8,20 @@ use leptos_router::path;
 
 #[component]
 pub fn App() -> impl IntoView {
-    provide_meta_context();
-    apply_stored_theme();
+  provide_meta_context();
+  apply_stored_theme();
 
-    view! {
-        <Title text="Ultralearn" />
-        <Router>
-            <Topbar />
-            <main class="main-content">
-                <Routes fallback=|| view! { <LandingView /> }>
-                    <Route path=path!("/") view=LandingView />
-                    <Route path=path!("/plan/:id") view=PlanOverview />
-                    <Route path=path!("/plan/:id/principle/:principleId") view=PrincipleDetail />
-                </Routes>
-            </main>
-        </Router>
-    }
+  view! {
+      <Title text="Ultralearn" />
+      <Router>
+          <Topbar />
+          <main class="main-content">
+              <Routes fallback=|| view! { <LandingView /> }>
+                  <Route path=path!("/") view=LandingView />
+                  <Route path=path!("/plan/:id") view=PlanOverview />
+                  <Route path=path!("/plan/:id/principle/:principleId") view=PrincipleDetail />
+              </Routes>
+          </main>
+      </Router>
+  }
 }
