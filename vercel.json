@@ -1,8 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "trunk build --release",
+  "buildCommand": "export CARGO_HOME=\"$HOME/.cargo\" RUSTUP_HOME=\"$HOME/.rustup\" && export PATH=\"$CARGO_HOME/bin:$PATH\" && trunk build --release",
   "outputDirectory": "dist",
-  "installCommand": "curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable --target wasm32-unknown-unknown && . \"$HOME/.cargo/env\" && cargo install --locked trunk",
+  "installCommand": "export CARGO_HOME=\"$HOME/.cargo\" RUSTUP_HOME=\"$HOME/.rustup\" && curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --default-toolchain stable --target wasm32-unknown-unknown && export PATH=\"$CARGO_HOME/bin:$PATH\" && cargo install --locked trunk",
   "framework": null,
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "headers": [
