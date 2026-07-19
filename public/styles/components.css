@@ -1,0 +1,1063 @@
+/* ============================================================
+   Ultralearn — global component styles
+   Ported from the Vue SFC <style scoped> blocks. Class names
+   are kept 1:1 so the Leptos view! markup matches the originals.
+   ============================================================ */
+
+/* ---------- App / Nav (App.vue) ---------- */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  height: 60px;
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.nav-logo a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: inherit;
+  text-decoration: none;
+}
+
+.nav-logo a:hover {
+  text-decoration: none;
+}
+
+.nav-logo svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.main-content {
+  min-height: calc(100vh - 60px);
+}
+
+/* ---------- Landing (LandingView.vue) ---------- */
+.landing {
+  min-height: calc(100vh - 60px);
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-section) 0;
+}
+
+.hero-inner {
+  max-width: 640px;
+  width: 100%;
+  padding: 0 var(--space-lg);
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+  background: var(--color-primary-muted);
+  padding: 6px 14px;
+  border-radius: var(--rounded-full);
+  margin-bottom: var(--space-lg);
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: var(--space-md);
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  color: var(--color-mute);
+  margin-bottom: var(--space-2xl);
+}
+
+.hero-form {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.btn-lg {
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 16px;
+}
+
+.btn-lg:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+}
+
+.examples-label {
+  font-size: 14px;
+  color: var(--color-mute);
+}
+
+.example-chip {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-body);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--rounded-full);
+  padding: 6px 16px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.example-chip:hover {
+  background: var(--color-primary-muted);
+  color: var(--color-primary);
+  border-color: var(--color-primary-muted);
+}
+
+.principles-preview {
+  padding: var(--space-section) 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: var(--space-sm);
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--color-mute);
+  margin-bottom: var(--space-2xl);
+}
+
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.principle-preview-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--rounded-md);
+}
+
+.principle-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--rounded-full);
+  flex-shrink: 0;
+}
+
+.principle-number {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-mute);
+  text-transform: uppercase;
+}
+
+.principle-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+/* ---------- Plan Overview (PlanOverview.vue) ---------- */
+.plan-overview {
+  padding: var(--space-xl) 0 var(--space-section);
+}
+
+.plan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+}
+
+.plan-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.plan-title-section {
+  margin-bottom: var(--space-2xl);
+}
+
+.plan-title-section h1 {
+  margin-bottom: var(--space-sm);
+}
+
+.plan-goal {
+  color: var(--color-mute);
+  font-size: 18px;
+  margin-bottom: var(--space-lg);
+}
+
+.plan-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.plan-progress .progress-bar {
+  flex: 1;
+  max-width: 400px;
+}
+
+.progress-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-mute);
+}
+
+.principle-card {
+  text-align: left;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--rounded-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.principle-card:hover {
+  box-shadow: var(--elevation-2);
+  transform: translateY(-2px);
+}
+
+.principle-accent {
+  height: 4px;
+}
+
+.principle-card-body {
+  padding: var(--space-lg);
+}
+
+.principle-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.principle-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--rounded-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-on-primary);
+}
+
+.principle-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+
+.principle-card-tagline {
+  font-size: 14px;
+  color: var(--color-mute);
+  margin-bottom: var(--space-md);
+}
+
+.principle-card-progress {
+  margin-top: auto;
+}
+
+.not-found {
+  padding: var(--space-section) 0;
+  text-align: center;
+}
+
+.not-found p {
+  margin-bottom: var(--space-lg);
+  color: var(--color-mute);
+}
+
+/* ---------- Principle Detail (PrincipleDetail.vue) ---------- */
+.principle-detail {
+  padding: var(--space-xl) 0 var(--space-section);
+}
+
+.detail-header {
+  margin-bottom: var(--space-xl);
+}
+
+.principle-hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid;
+  border-radius: var(--rounded-md);
+  margin-bottom: var(--space-lg);
+}
+
+.principle-badge-lg {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: var(--rounded-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-on-primary);
+}
+
+.principle-info {
+  flex: 1;
+}
+
+.principle-tag {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: var(--space-xs);
+}
+
+.principle-info h1 {
+  margin-bottom: var(--space-xs);
+}
+
+.principle-tagline {
+  font-size: 16px;
+  color: var(--color-mute);
+}
+
+.complete-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--rounded-md);
+  color: var(--color-mute);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  transition: all 0.15s;
+}
+
+.complete-btn:hover {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.complete-btn.completed {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+
+.principle-desc {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--color-body);
+  margin-bottom: var(--space-2xl);
+  max-width: 800px;
+}
+
+.detail-body {
+  max-width: 800px;
+}
+
+.detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+@media (max-width: 767px) {
+  .principle-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .complete-btn {
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
+/* ---------- ChecklistSection.vue ---------- */
+.checklist-section {
+  margin-bottom: var(--space-xl);
+}
+
+.checklist-section h3 {
+  margin-bottom: var(--space-md);
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface-raised);
+  border-radius: var(--rounded-md);
+}
+
+.checklist-item.checked .checklist-text {
+  text-decoration: line-through;
+  color: var(--color-mute);
+}
+
+.check-btn {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 2px solid var(--color-border-strong);
+  border-radius: var(--rounded-sm);
+  background: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.checklist-item.checked .check-btn {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+
+.checklist-text {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.remove-btn {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-mute);
+  border-radius: var(--rounded-sm);
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.checklist-item:hover .remove-btn,
+.card-list-item:hover .remove-btn {
+  opacity: 1;
+}
+
+.remove-btn:hover {
+  color: var(--color-error);
+}
+
+.add-item {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.add-item input {
+  flex: 1;
+}
+
+.add-item .btn {
+  flex-shrink: 0;
+  padding: 12px 16px;
+}
+
+/* ---------- NotesSection.vue ---------- */
+.notes-section h3 {
+  margin-bottom: var(--space-md);
+}
+
+/* ---------- PomodoroTimer.vue ---------- */
+.pomodoro {
+  text-align: center;
+  padding: var(--space-lg);
+  background: var(--color-surface-raised);
+  border-radius: var(--rounded-md);
+}
+
+.pomodoro h3 {
+  margin-bottom: var(--space-lg);
+}
+
+.timer-modes {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.mode-btn {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--rounded-full);
+  color: var(--color-mute);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: all 0.15s;
+}
+
+.mode-btn.active {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.timer-display {
+  font-size: 72px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -2px;
+  color: var(--color-ink);
+  margin-bottom: var(--space-md);
+}
+
+.timer-progress {
+  height: 4px;
+  border-radius: var(--rounded-full);
+  background: var(--color-border);
+  margin-bottom: var(--space-lg);
+  overflow: hidden;
+}
+
+.timer-progress-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--rounded-full);
+  transition: width 1s linear;
+}
+
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.sessions {
+  font-size: 14px;
+  color: var(--color-mute);
+}
+
+/* ---------- FlashcardSection.vue ---------- */
+.flashcard-section {
+  margin-bottom: var(--space-xl);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--color-surface-raised);
+  border-radius: var(--rounded-md);
+  margin-bottom: var(--space-md);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.empty {
+  text-align: center;
+  padding: var(--space-2xl);
+  color: var(--color-mute);
+  background: var(--color-surface-raised);
+  border-radius: var(--rounded-md);
+}
+
+.card-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-counter {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-mute);
+  margin-bottom: var(--space-md);
+}
+
+.flashcard {
+  width: 100%;
+  max-width: 400px;
+  height: 240px;
+  perspective: 1000px;
+  cursor: pointer;
+  margin-bottom: var(--space-md);
+  position: relative;
+}
+
+.flashcard-face {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--rounded-lg);
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.4s ease;
+}
+
+.flashcard .front {
+  transform: rotateY(0);
+}
+
+.flashcard .back {
+  transform: rotateY(180deg);
+}
+
+.flashcard.flipped .front {
+  transform: rotateY(-180deg);
+}
+
+.flashcard.flipped .back {
+  transform: rotateY(0);
+}
+
+.face-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-mute);
+  margin-bottom: var(--space-sm);
+}
+
+.face-content {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--color-ink);
+}
+
+.face-hint {
+  font-size: 12px;
+  color: var(--color-placeholder);
+  margin-top: var(--space-md);
+}
+
+.card-controls {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.card-list {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.card-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface-raised);
+  border-radius: var(--rounded-md);
+}
+
+.card-list-front {
+  font-size: 14px;
+  color: var(--color-body);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- FeynmanWorkspace.vue ---------- */
+.feynman {
+  padding: var(--space-lg);
+  background: var(--color-surface-raised);
+  border-radius: var(--rounded-md);
+}
+
+.feynman h3 {
+  margin-bottom: var(--space-lg);
+}
+
+.steps {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.step-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--rounded-full);
+  color: var(--color-mute);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: all 0.15s;
+}
+
+.step-btn.active {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.gap-prompt {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-warning-muted);
+  border-radius: var(--rounded-md);
+  color: var(--color-warning);
+}
+
+.gap-prompt p {
+  font-size: 14px;
+  color: var(--color-body);
+}
+
+.review-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.review-block {
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--rounded-md);
+}
+
+.review-block h4 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-mute);
+  margin-bottom: var(--space-xs);
+}
+
+.review-block p {
+  font-size: 14px;
+  color: var(--color-body);
+}
+
+.preserve-whitespace {
+  white-space: pre-wrap;
+}
+
+.review-hint {
+  font-size: 14px;
+  color: var(--color-mute);
+  font-style: italic;
+}
+
+/* ---------- FeedbackLog.vue ---------- */
+.feedback-section {
+  margin-bottom: var(--space-xl);
+}
+
+.feedback-section h3 {
+  margin-bottom: var(--space-md);
+}
+
+.type-select {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.type-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--rounded-full);
+  color: var(--color-mute);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: all 0.15s;
+}
+
+.type-btn.active {
+  border-color: transparent;
+}
+
+.form-row {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.form-row input {
+  flex: 1;
+}
+
+.form-row .btn {
+  flex-shrink: 0;
+  padding: 12px 16px;
+}
+
+.log-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.log-entry {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-surface-raised);
+  border-radius: var(--rounded-md);
+}
+
+.log-type {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--rounded-full);
+  color: white;
+  height: fit-content;
+}
+
+.log-content {
+  flex: 1;
+}
+
+.log-content p {
+  font-size: 14px;
+  color: var(--color-body);
+  margin-bottom: var(--space-xs);
+}
+
+.log-date {
+  font-size: 12px;
+  color: var(--color-mute);
+}
+
+/* ---------- ExperimentTracker.vue ---------- */
+.experiment-section {
+  margin-bottom: var(--space-xl);
+}
+
+.exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.exp-card {
+  padding: var(--space-md);
+  background: var(--color-surface-raised);
+  border-radius: var(--rounded-md);
+}
+
+.exp-header {
+  margin-bottom: var(--space-sm);
+}
+
+.status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: var(--rounded-full);
+  color: white;
+  cursor: pointer;
+}
+
+.exp-hypothesis {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: var(--space-xs);
+}
+
+.exp-method {
+  font-size: 14px;
+  color: var(--color-body);
+}
+
+/* ---------- RetentionSchedule.vue ---------- */
+.retention-section h3 {
+  margin-bottom: var(--space-xs);
+}
+
+.desc {
+  font-size: 14px;
+  color: var(--color-mute);
+  margin-bottom: var(--space-md);
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.schedule-card {
+  padding: var(--space-md);
+  background: var(--color-surface-raised);
+  border-radius: var(--rounded-md);
+}
+
+.schedule-topic {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: var(--space-md);
+}
+
+.schedule-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.date-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--rounded-full);
+  color: var(--color-mute);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: all 0.15s;
+}
+
+.date-btn.due {
+  color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.date-btn.completed {
+  color: white;
+  background: var(--color-success);
+  border-color: var(--color-success);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1023px) {
+  .principles-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-title {
+    font-size: 32px;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+  }
+
+  .principles-grid {
+    grid-template-columns: 1fr;
+  }
+}

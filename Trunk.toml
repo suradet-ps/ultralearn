@@ -1,0 +1,12 @@
+[build]
+target = "index.html"
+release = true
+dist = "dist"
+public_url = "/"
+filehash = true
+minify = "on_release"
+
+[serve]
+addresses = ["127.0.0.1"]
+port = 3000
+no_spa = false          # SPA fallback for client-side routing
