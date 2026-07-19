@@ -4,11 +4,10 @@
 
 **Build structured, self-directed learning plans grounded in the 9 Ultralearning principles.**
 
-[![CI](https://github.com/sursdet-ps/ultralearn/actions/workflows/ci.yml/badge.svg)](https://github.com/sursdet-ps/ultralearn/actions/workflows/ci.yml)
-[![Vue 3](https://img.shields.io/badge/Vue-3-42b883?logo=vue.js&logoColor=white)](https://vuejs.org/)
-[![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)](https://vite.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Bun](https://img.shields.io/badge/Bun-1.3-000000?logo=bun&logoColor=white)](https://bun.sh/)
+[![CI](https://github.com/suradet-ps/ultralearn/actions/workflows/ci.yml/badge.svg)](https://github.com/suradet-ps/ultralearn/actions/workflows/ci.yml)
+[![Rust](https://img.shields.io/badge/Rust-1.97-000000?logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![Leptos](https://img.shields.io/badge/Leptos-0.8-dea584?logo=rust&logoColor=white)](https://leptos.dev/)
+[![Trunk](https://img.shields.io/badge/Trunk-WASM-ff69b4)](https://trunkrs.dev/)
 [![License](https://img.shields.io/badge/license-MIT-4b32c3)](LICENSE)
 
 </div>
@@ -17,7 +16,7 @@
 
 > Turn any topic — *"Learn Rust"*, *"Play guitar"*, *"Japanese"* — into a guided plan organized around the nine ultralearning principles from [Scott Young](https://www.scotthyoung.com/blog/the-ultralearning-book/).
 
-Ultralearn is a client-side web app that turns any topic — *"Learn Rust"*, *"Play guitar"*, *"Japanese"* — into a guided plan organized around the nine ultralearning principles. Track notes, checklists, flashcards, feedback logs, and experiments per principle, and watch your progress compound.
+Ultralearn is a fully client-side web app compiled to WebAssembly with [Leptos](https://leptos.dev/). Enter a topic, and it scaffolds a plan across all 9 principles. Track notes, checklists, flashcards, feedback logs, experiments, and spaced-repetition schedules per principle, and watch your progress compound.
 
 Everything runs in the browser. There is **no backend and no account** — your plans are stored locally in `localStorage` and can be exported or imported as JSON.
 
@@ -33,22 +32,22 @@ Everything runs in the browser. There is **no backend and no account** — your 
 | 🃏 **Flashcards** | Create retrieval practice cards for any principle. |
 | 📝 **Feedback log** | Capture outcome / informational / corrective feedback. |
 | 🧪 **Experiments** | Track learning hypotheses, methods, and results. |
+| 🗓️ **Retention schedules** | Spaced-repetition reminders (1/3/7/14/30-day intervals). |
 | 📊 **Progress tracking** | Per-principle and overall completion percentages. |
 | 🌗 **Dark mode** | Theme toggle persisted to `localStorage`. |
 | 💾 **Export / Import** | Backup or share plans as JSON. |
-| ⚡ **Zero-config** | No server, no database, no build step required to run locally. |
 
 ---
 
 ## Tech Stack
 
-- **[Vue 3](https://vuejs.org/)** — Composition API with `<script setup>` SFCs
-- **[Vite](https://vite.dev/)** — build tooling and dev server
-- **[TypeScript](https://www.typescriptlang.org/)** — type-safe source (`vue-tsc` for checking)
-- **[Pinia](https://pinia.vuejs.org/)** — state management
-- **[Vue Router](https://router.vuejs.org/)** — client-side routing
-- **[Lucide](https://lucide.dev/)** — icon set
-- **[Bun](https://bun.sh/)** — package manager & runtime
+- **[Rust](https://www.rust-lang.org/)** (edition 2024, `1.97+`) compiled to `wasm32-unknown-unknown`
+- **[Leptos](https://leptos.dev/)** `0.8` — reactive UI (`csr` mode)
+- **[leptos_meta](https://docs.rs/leptos_meta)** — document head / title
+- **[leptos_router](https://docs.rs/leptos_router)** — client-side routing
+- **[Trunk](https://trunkrs.dev/)** — WASM bundler & dev server
+- **[gloo-storage](https://docs.rs/gloo-storage)** — `localStorage` persistence
+- **[serde](https://serde.rs/)** / **[chrono](https://docs.rs/chrono)** — (de)serialization & dates
 
 ---
 
@@ -56,36 +55,36 @@ Everything runs in the browser. There is **no backend and no account** — your 
 
 ### Prerequisites
 
-- [Bun](https://bun.sh/) (v1.3+)
-
-### Installation
+- [Rust](https://www.rust-lang.org/tools/install) (stable, `1.97+`) with the `wasm32-unknown-unknown` target
+- [Trunk](https://trunkrs.dev/#install)
 
 ```bash
-bun install
+rustup target add wasm32-unknown-unknown
+cargo install --locked trunk
 ```
 
 ### Development
 
-Start the Vite dev server with hot module replacement:
+Start the Trunk dev server with hot reload:
 
 ```bash
-bun run dev
+trunk serve
 ```
 
-The app is served at `http://localhost:5173` by default.
+The app is served at `http://127.0.0.1:3000` by default.
 
 ### Production Build
 
-Type-check and build to `dist/`:
-
 ```bash
-bun run build
+trunk build --release
 ```
+
+Static output is written to `dist/` and can be served by any static host.
 
 ### Preview the Build
 
 ```bash
-bun run preview
+trunk serve --release
 ```
 
 ---
@@ -94,21 +93,20 @@ bun run preview
 
 ```text
 ultralearn/
-├── .github/workflows/ci.yml   # CI: type-check & build
-├── public/                    # Static assets (favicon, icons)
+├── .github/workflows/ci.yml   # CI: fmt, clippy, check, test, trunk build
+├── public/                    # Static assets (favicon, styles)
 ├── src/
-│   ├── components/            # Reusable UI & activity components
-│   │   └── activities/        # Pomodoro, flashcards, feedback, etc.
-│   ├── router/                # Vue Router configuration
-│   ├── stores/                # Pinia stores (plan state)
-│   ├── types/                 # TypeScript models & principle data
-│   ├── views/                 # Route-level pages
-│   ├── App.vue                # Root component (nav + theme)
-│   ├── main.ts                # App bootstrap
-│   └── style.css              # Global styles & design tokens
-├── index.html
-├── vite.config.ts
-└── tsconfig*.json
+│   ├── app.rs                 # Root component (router + shell)
+│   ├── lib.rs                 # wasm-bindgen entry point
+│   ├── components/            # UI components (layout, icons, activities)
+│   ├── composables/           # Reusable logic (timers, etc.)
+│   ├── core/                  # Framework-agnostic logic (types, theme, time)
+│   ├── stores/                # Reactive plan state (OnceLock singletons)
+│   └── views/                 # Route-level pages
+├── index.html                 # Trunk entry point
+├── Cargo.toml
+├── Trunk.toml
+└── rust-toolchain.toml
 ```
 
 ---
@@ -121,17 +119,19 @@ Ultralearn is fully client-side. All plans, notes, and progress live in your bro
 
 ## Continuous Integration
 
-GitHub Actions runs on every push and pull request to `main`. The workflow installs dependencies with `bun install --frozen-lockfile` and runs `bun run build` (type-check + production build). See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+GitHub Actions runs on every push and pull request to `main`. The workflow checks formatting (`cargo fmt`), lints (`cargo clippy` for `wasm32`), type-checks (`cargo check`), runs tests (`cargo test`), and produces a production build with Trunk. See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ---
 
 ## Scripts
 
-| Script | Description |
+| Command | Description |
 | --- | --- |
-| `bun run dev` | Start the development server. |
-| `bun run build` | Type-check (`vue-tsc`) and build for production. |
-| `bun run preview` | Preview the production build locally. |
+| `trunk serve` | Start the development server with hot reload. |
+| `trunk build --release` | Build the optimized WASM app to `dist/`. |
+| `cargo fmt --all --check` | Verify code formatting. |
+| `cargo clippy --target wasm32-unknown-unknown` | Lint the app. |
+| `cargo test` | Run unit tests. |
 
 ---
 
