@@ -66,7 +66,7 @@ pub fn ExperimentTracker(plan_id: String, principle_id: u32) -> impl IntoView {
                         <input
                             type="text"
                             placeholder="e.g. Learning from video tutorials works better than reading docs"
-                            prop:value=hypothesis.get()
+                            prop:value=move || hypothesis.get()
                             on:input=move |ev| hypothesis.set(event_target_value(&ev))
                         />
                     </div>
@@ -75,7 +75,7 @@ pub fn ExperimentTracker(plan_id: String, principle_id: u32) -> impl IntoView {
                         <textarea
                             rows=3
                             placeholder="e.g. Spend 1 week on video tutorials, then 1 week on docs. Compare retention and speed."
-                            prop:value=method.get()
+                            prop:value=move || method.get()
                             on:input=move |ev| method.set(event_target_value(&ev))
                         ></textarea>
                     </div>

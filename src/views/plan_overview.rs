@@ -112,31 +112,39 @@ pub fn PlanOverview() -> impl IntoView {
                                         let name = pr.name.clone();
                                         let tagline = pr.tagline.clone();
                                         let pid_inner = pid_for_cards.clone();
-                                        let c = color.as_str();
-                                        let pr_progress = store.get_principle_progress(&pid_inner, id);
-                                        let is_completed = store
-                                            .get_plan(&pid_inner)
-                                            .and_then(|pl| {
-                                                pl.principles
-                                                    .iter()
-                                                    .find(|x| x.principle_id == id)
-                                                    .map(|c| c.completed)
-                                            })
-                                            .unwrap_or(false);
+                                        let c = color.clone();
+                                        let c_accent = color.clone();
+                                        let c_badge = color.clone();
+                                        let pid_progress = pid_inner.clone();
+                                        let pr_progress = Signal::derive(move || {
+                                            store.get_principle_progress(&pid_progress, id)
+                                        });
+                                        let pid_completed = pid_inner.clone();
+                                        let is_completed = Signal::derive(move || {
+                                            store
+                                                .get_plan(&pid_completed)
+                                                .and_then(|pl| {
+                                                    pl.principles
+                                                        .iter()
+                                                        .find(|x| x.principle_id == id)
+                                                        .map(|c| c.completed)
+                                                })
+                                                .unwrap_or(false)
+                                        });
                                         let plan_id_for_click = plan_id;
                                         view! {
                                             <button class="principle-card" on:click=move |_| {
                                                 let id_txt = plan_id_for_click.get_untracked();
                                                 navigate.with_value(|n| n(&format!("/plan/{id_txt}/principle/{id}"), NavigateOptions::default()));
                                             }>
-                                                <div class="principle-accent" style=format!("background: {c};")></div>
+                                                <div class="principle-accent" style=format!("background: {c_accent};")></div>
                                                 <div class="principle-card-body">
                                                     <div class="principle-card-top">
-                                                        <div class="principle-badge" style=format!("background: {c};")>
+                                                        <div class="principle-badge" style=format!("background: {c_badge};")>
                                                             {id}
                                                         </div>
                                                         <Show
-                                                            when=move || is_completed
+                                                            when=move || is_completed.get()
                                                             fallback=|| view! { <Circle size=20 color="var(--color-mute)".to_string() /> }
                                                         >
                                                             <CheckCircle2 size=20 color="var(--color-success)".to_string() />
@@ -148,7 +156,7 @@ pub fn PlanOverview() -> impl IntoView {
                                                         <div class="progress-bar">
                                                             <div
                                                                 class="progress-bar-fill"
-                                                                style=format!("width: {pr_progress}%; background: {c};")
+                                                                style=move || format!("width: {}%; background: {c};", pr_progress.get())
                                                             ></div>
                                                         </div>
                                                     </div>

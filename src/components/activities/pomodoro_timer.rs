@@ -21,11 +21,10 @@ pub fn PomodoroTimer() -> impl IntoView {
                     each=move || modes
                     key=|m| *m
                     children=move |m| {
-                        let active = timer.mode.get() == m;
                         view! {
                             <button
                                 class="mode-btn"
-                                class:active=active
+                                class:active=move || timer.mode.get() == m
                                 on:click=move |_| timer.set_mode.run(m)
                             >
                                 {m.label()}

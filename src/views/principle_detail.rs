@@ -65,7 +65,6 @@ pub fn PrincipleDetail() -> impl IntoView {
                 let name = pr.name.clone();
                 let tagline = pr.tagline.clone();
                 let description = pr.description.clone();
-                let is_completed = completed.get();
                 view! {
                     <div class="principle-detail">
                         <div class="container">
@@ -89,13 +88,13 @@ pub fn PrincipleDetail() -> impl IntoView {
                                 </div>
                                 <button
                                     class="complete-btn"
-                                    class:completed=is_completed
+                                    class:completed=move || completed.get()
                                     on:click=move |ev| toggle.run(ev)
                                 >
-                                    <Show when=move || is_completed fallback=|| view! { <Circle size=20 /> }>
+                                    <Show when=move || completed.get() fallback=|| view! { <Circle size=20 /> }>
                                         <CheckCircle2 size=20 />
                                     </Show>
-                                    {move || if is_completed { "Completed" } else { "Mark Complete" }}
+                                    {move || if completed.get() { "Completed" } else { "Mark Complete" }}
                                 </button>
                             </div>
 

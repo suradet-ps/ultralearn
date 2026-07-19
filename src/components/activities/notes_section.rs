@@ -12,7 +12,7 @@ pub fn NotesSection(plan_id: String, principle_id: u32) -> impl IntoView {
             <h3>"Notes"</h3>
             <textarea
                 placeholder="Write your notes, reflections, and plans here..."
-                prop:value=notes.get_untracked()
+                prop:value=move || notes.get()
                 on:input=move |ev| {
                     let v = event_target_value(&ev);
                     notes.set(v.clone());

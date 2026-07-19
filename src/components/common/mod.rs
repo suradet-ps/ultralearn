@@ -75,7 +75,7 @@ pub fn BaseInput(
                     rows=rows
                     placeholder=placeholder
                     required=required
-                    prop:value=value.get()
+                    prop:value=move || value.get()
                     on:input=move |ev| {
                         let v = event_target_value(&ev);
                         on_input.run(v);
@@ -91,7 +91,7 @@ pub fn BaseInput(
                     type=input_type
                     placeholder=placeholder
                     required=required
-                    prop:value=value.get()
+                    prop:value=move || value.get()
                     on:input=move |ev| {
                         let v = event_target_value(&ev);
                         on_input.run(v);
@@ -137,7 +137,7 @@ pub fn AddRow(
             <input
                 type="text"
                 placeholder=placeholder
-                prop:value=value.get()
+                prop:value=move || value.get()
                 on:input=move |ev| on_input.run(event_target_value(&ev))
                 on:keydown=key_handler
             />

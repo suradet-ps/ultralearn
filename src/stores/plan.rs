@@ -25,7 +25,7 @@ impl PlanState {
     }
 
     pub fn get_plan(&self, id: &str) -> Option<Plan> {
-        self.plans.get_untracked().into_iter().find(|p| p.id == id)
+        self.plans.get().into_iter().find(|p| p.id == id)
     }
 
     pub fn create_plan(&self, topic: &str, goal: &str) -> Plan {

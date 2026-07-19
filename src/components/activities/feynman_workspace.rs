@@ -75,7 +75,7 @@ pub fn FeynmanWorkspace(plan_id: String, principle_id: u32) -> impl IntoView {
                         <input
                             type="text"
                             placeholder="e.g. Ownership in Rust, Backpropagation..."
-                            prop:value=concept.get()
+                            prop:value=move || concept.get()
                             on:input=move |ev| {
                                 let v = event_target_value(&ev);
                                 concept.set(v.clone());
@@ -88,7 +88,7 @@ pub fn FeynmanWorkspace(plan_id: String, principle_id: u32) -> impl IntoView {
                         <textarea
                             rows=8
                             placeholder="Write your explanation here. Use simple language. If you get stuck, that's a gap you need to fill..."
-                            prop:value=explanation.get()
+                            prop:value=move || explanation.get()
                             on:input=move |ev| {
                                 let v = event_target_value(&ev);
                                 explanation.set(v.clone());
@@ -115,7 +115,7 @@ pub fn FeynmanWorkspace(plan_id: String, principle_id: u32) -> impl IntoView {
                         <textarea
                             rows=6
                             placeholder="List the specific parts where your understanding broke down..."
-                            prop:value=gaps.get()
+                            prop:value=move || gaps.get()
                             on:input=move |ev| {
                                 let v = event_target_value(&ev);
                                 gaps.set(v.clone());

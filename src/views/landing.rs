@@ -59,7 +59,7 @@ pub fn LandingView() -> impl IntoView {
                                 type="text"
                                 placeholder="e.g. Rust Programming, Guitar, Machine Learning..."
                                 required
-                                prop:value=topic.get()
+                                prop:value=move || topic.get()
                                 on:input=move |ev| topic.set(event_target_value(&ev))
                             />
                         </div>
@@ -70,7 +70,7 @@ pub fn LandingView() -> impl IntoView {
                                 id="goal"
                                 rows=3
                                 placeholder="What do you want to achieve? e.g. Build a CLI tool in Rust, Play 3 songs on guitar..."
-                                prop:value=goal.get()
+                                prop:value=move || goal.get()
                                 on:input=move |ev| goal.set(event_target_value(&ev))
                             ></textarea>
                         </div>

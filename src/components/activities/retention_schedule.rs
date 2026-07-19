@@ -35,7 +35,7 @@ pub fn RetentionSchedule(plan_id: String, principle_id: u32) -> impl IntoView {
                 <input
                     type="text"
                     placeholder="Topic or concept to schedule for review"
-                    prop:value=topic.get()
+                    prop:value=move || topic.get()
                     on:input=move |ev| topic.set(event_target_value(&ev))
                     on:keydown=move |ev: web_sys::KeyboardEvent| {
                         if ev.key() == "Enter" { add.run(()); }

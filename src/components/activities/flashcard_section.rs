@@ -71,13 +71,13 @@ pub fn FlashcardSection(plan_id: String, principle_id: u32) -> impl IntoView {
                     <input
                         type="text"
                         placeholder="Front (question)"
-                        prop:value=front.get()
+                        prop:value=move || front.get()
                         on:input=move |ev| front.set(event_target_value(&ev))
                     />
                     <input
                         type="text"
                         placeholder="Back (answer)"
-                        prop:value=back.get()
+                        prop:value=move || back.get()
                         on:input=move |ev| back.set(event_target_value(&ev))
                         on:keydown=move |ev: web_sys::KeyboardEvent| {
                             if ev.key() == "Enter" { add.run(()); }

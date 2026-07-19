@@ -50,14 +50,17 @@ pub fn FeedbackLog(plan_id: String, principle_id: u32) -> impl IntoView {
                         key=|t| t.0
                         children=move |t| {
                             let (ty, label, color) = t;
-                            let active = fb_type.get() == ty;
-                            let style = if active {
-                                format!("background: {color}; color: white;")
-                            } else {
-                                String::new()
-                            };
                             view! {
-                                <button class="type-btn" class:active style=style on:click=move |_| fb_type.set(ty)>
+                                <button
+                                    class="type-btn"
+                                    class:active=move || fb_type.get() == ty
+                                    style=move || if fb_type.get() == ty {
+                                        format!("background: {color}; color: white;")
+                                    } else {
+                                        String::new()
+                                    }
+                                    on:click=move |_| fb_type.set(ty)
+                                >
                                     {label}
                                 </button>
                             }
@@ -68,7 +71,7 @@ pub fn FeedbackLog(plan_id: String, principle_id: u32) -> impl IntoView {
                     <input
                         type="text"
                         placeholder="What feedback did you get?"
-                        prop:value=text.get()
+                        prop:value=move || text.get()
                         on:input=move |ev| text.set(event_target_value(&ev))
                         on:keydown=move |ev: web_sys::KeyboardEvent| {
                             if ev.key() == "Enter" { add.run(()); }
