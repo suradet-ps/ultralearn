@@ -1,6 +1,6 @@
 use crate::components::activities::{
-    ChecklistSection, ExperimentTracker, FeedbackLog, FeynmanWorkspace, FlashcardSection,
-    NotesSection, PomodoroTimer, RetentionSchedule,
+  ChecklistSection, ExperimentTracker, FeedbackLog, FeynmanWorkspace, FlashcardSection,
+  NotesSection, PomodoroTimer, RetentionSchedule,
 };
 use crate::components::icons::{ArrowLeft, CheckCircle2, Circle};
 use crate::core::types::principles_data::principles;
@@ -11,54 +11,54 @@ use leptos_router::hooks::{use_navigate, use_params_map};
 
 #[component]
 pub fn PrincipleDetail() -> impl IntoView {
-    let store = use_plan();
-    let params = use_params_map();
-    let plan_id = Signal::derive(move || params.get().get("id").unwrap_or_default());
-    let principle_id = Signal::derive(move || {
-        params
-            .get()
-            .get("principleId")
-            .and_then(|s| s.parse::<u32>().ok())
-            .unwrap_or(0)
-    });
-    let navigate = use_navigate();
+  let store = use_plan();
+  let params = use_params_map();
+  let plan_id = Signal::derive(move || params.get().get("id").unwrap_or_default());
+  let principle_id = Signal::derive(move || {
+    params
+      .get()
+      .get("principleId")
+      .and_then(|s| s.parse::<u32>().ok())
+      .unwrap_or(0)
+  });
+  let navigate = use_navigate();
 
-    let plan = Signal::derive(move || store.get_plan(&plan_id.get()));
-    let principle = Signal::derive(move || {
-        principles()
-            .iter()
-            .find(|p| p.id == principle_id.get())
-            .cloned()
-    });
-    let completed = Signal::derive(move || {
-        store
-            .get_plan(&plan_id.get())
-            .and_then(|p| {
-                p.principles
-                    .iter()
-                    .find(|pp| pp.principle_id == principle_id.get())
-                    .map(|pp| pp.completed)
-            })
-            .unwrap_or(false)
-    });
+  let plan = Signal::derive(move || store.get_plan(&plan_id.get()));
+  let principle = Signal::derive(move || {
+    principles()
+      .iter()
+      .find(|p| p.id == principle_id.get())
+      .cloned()
+  });
+  let completed = Signal::derive(move || {
+    store
+      .get_plan(&plan_id.get())
+      .and_then(|p| {
+        p.principles
+          .iter()
+          .find(|pp| pp.principle_id == principle_id.get())
+          .map(|pp| pp.completed)
+      })
+      .unwrap_or(false)
+  });
 
-    let navigate = StoredValue::new(navigate);
+  let navigate = StoredValue::new(navigate);
 
-    let go_back = Callback::new(move |_: web_sys::MouseEvent| {
-        let id = plan_id.get_untracked();
-        navigate.with_value(|n| n(&format!("/plan/{id}"), NavigateOptions::default()));
-    });
+  let go_back = Callback::new(move |_: web_sys::MouseEvent| {
+    let id = plan_id.get_untracked();
+    navigate.with_value(|n| n(&format!("/plan/{id}"), NavigateOptions::default()));
+  });
 
-    let toggle = Callback::new(move |_: web_sys::MouseEvent| {
-        let id = plan_id.get_untracked();
-        let pid = principle_id.get_untracked();
-        store.toggle_principle_completed(&id, pid);
-    });
+  let toggle = Callback::new(move |_: web_sys::MouseEvent| {
+    let id = plan_id.get_untracked();
+    let pid = principle_id.get_untracked();
+    store.toggle_principle_completed(&id, pid);
+  });
 
-    let body = move || {
-        let plan = plan.get();
-        let principle = principle.get();
-        match (plan, principle) {
+  let body = move || {
+    let plan = plan.get();
+    let principle = principle.get();
+    match (plan, principle) {
             (Some(_), Some(pr)) => {
                 let pid = pr.id;
                 let color = pr.color.clone();
@@ -103,7 +103,7 @@ pub fn PrincipleDetail() -> impl IntoView {
                             <div class="detail-body">
                                 <div class="detail-main">
                                     <Show when=move || pid == 2 fallback=|| ()>
-                                        <PomodoroTimer />
+                                        <PomodoroTimer plan_id=plan_id.get() />
                                     </Show>
                                     <Show when=move || pid == 5 fallback=|| ()>
                                         <FlashcardSection plan_id=plan_id.get() principle_id=pid />
@@ -142,7 +142,31 @@ pub fn PrincipleDetail() -> impl IntoView {
                 .into_any()
             }
         }
-    };
+  };
 
-    view! { {body} }
+  // Keyboard shortcuts: `c` toggles complete, `b`/`Escape` goes back.
+  let go_back_kb = go_back;
+  let toggle_kb = toggle;
+  Effect::new(move |_| {
+    let go_back_kb = go_back_kb;
+    let toggle_kb = toggle_kb;
+    window_event_listener(leptos::ev::keydown, move |ev: leptos::ev::KeyboardEvent| {
+      if crate::core::utils::is_typing(&ev) {
+        return;
+      }
+      match ev.key().as_str() {
+        "c" => {
+          ev.prevent_default();
+          toggle_kb.run(web_sys::MouseEvent::new("click").unwrap());
+        }
+        "b" | "Escape" => {
+          ev.prevent_default();
+          go_back_kb.run(web_sys::MouseEvent::new("click").unwrap());
+        }
+        _ => {}
+      }
+    });
+  });
+
+  view! { {body} }
 }

@@ -47,17 +47,21 @@ decision below:
 
 Close the gaps between "works" and "delightful to use every day."
 
-- [ ] Plan renaming and editing from the overview screen (not just create/delete)
-- [ ] Per-plan tags and a searchable plan list on the landing page
-- [ ] Duplicate / template a plan ("start a new Rust plan from my old one")
-- [ ] Rich-text or markdown notes with a safe in-WASM sanitizer (`ammonia`)
+- [x] Plan renaming and editing from the overview screen (not just create/delete)
+- [x] Per-plan tags and a searchable plan list on the landing page
+- [x] Duplicate / template a plan ("start a new Rust plan from my old one")
+- [x] Markdown notes with a safe in-WASM renderer (`pulldown-cmark`, HTML
+      escaped by default so notes can't inject scripts) — mirrors the
+      "rich-text / markdown with sanitizer" goal without the `ammonia` weight
 - [ ] Flashcard improvements: images, LaTeX/MathML, and an SM-2-style review loop
-      driven by the existing `RetentionSchedule`
-- [ ] Pomodoro session history and a simple "focus this week" streak indicator
-- [ ] Keyboard shortcuts across the app (navigate principles, toggle complete,
-      jump to notes) — keyboard-only from day one
-- [ ] Accessibility pass: semantic HTML, focus management, ARIA, `prefers-reduced-motion`
-- [ ] Offline installability: a web app manifest + service worker so Ultralearn
+      driven by the existing `RetentionSchedule` *(deferred to Phase 2 / FSRS)*
+- [x] Pomodoro session history and a simple "focus this week" streak indicator
+- [x] Keyboard shortcuts across the app (digits 1-9 jump to a principle on
+      the overview, `c` toggles complete / `b` or `Esc` goes back on a
+      principle, shortcuts stand down while typing)
+- [x] Accessibility pass: semantic HTML, ARIA labels, focus-management
+      friendly markup, and `prefers-reduced-motion` to disable animations
+- [x] Offline installability: a web app manifest + service worker so Ultralearn
       opens and works with no network like a native app
 
 ---

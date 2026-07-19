@@ -1,11 +1,18 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4f46e5" />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <title>Ultralearn</title>
 
     <link data-trunk rel="icon" type="image/svg+xml" href="public/favicon.svg" />
+    <!-- Force Trunk to copy the manifest into dist/ (linked above as /manifest.webmanifest) -->
+    <link data-trunk rel="icon" type="application/manifest+json" href="public/manifest.webmanifest" />
+
+    <!-- Service worker (offline installability). Trunk copies this to dist/. -->
+    <script data-trunk type="text/javascript" src="public/sw.js" data-no-minify></script>
 
     <!-- App styles: Trunk copies + hashes these into dist/ -->
     <link data-trunk rel="css" href="public/styles/main.css" />
