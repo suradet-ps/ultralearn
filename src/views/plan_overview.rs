@@ -1,0 +1,170 @@
+use crate::components::icons::{ArrowLeft, CheckCircle2, Circle, Download, Trash2};
+use crate::core::types::principles_data::principles;
+use crate::core::utils::slugify;
+use crate::stores::use_plan;
+use leptos::prelude::*;
+use leptos_router::NavigateOptions;
+use leptos_router::hooks::{use_navigate, use_params_map};
+
+use web_sys::wasm_bindgen::JsCast;
+
+#[component]
+pub fn PlanOverview() -> impl IntoView {
+    let store = use_plan();
+    let params = use_params_map();
+    let plan_id = Signal::derive(move || params.get().get("id").unwrap_or_default());
+    let navigate = use_navigate();
+
+    let progress = Signal::derive(move || store.get_progress(&plan_id.get()));
+
+    let navigate = StoredValue::new(navigate);
+
+    let go_back = Callback::new(move |_: web_sys::MouseEvent| {
+        navigate.with_value(|n| n("/", NavigateOptions::default()));
+    });
+
+    let delete = Callback::new(move |_: web_sys::MouseEvent| {
+        if web_sys::window()
+            .and_then(|w| {
+                w.confirm_with_message("Delete this plan? This cannot be undone.")
+                    .ok()
+            })
+            .unwrap_or(false)
+        {
+            let id = plan_id.get_untracked();
+            store.delete_plan(&id);
+            navigate.with_value(|n| n("/", NavigateOptions::default()));
+        }
+    });
+
+    let export = Callback::new(move |_: web_sys::MouseEvent| {
+        let id = plan_id.get_untracked();
+        let json = store.export_plan(&id);
+        if let Some(plan) = store.get_plan(&id)
+            && let Some(window) = web_sys::window()
+        {
+            let filename = format!("ultralearn-{}.json", slugify(&plan.topic));
+            let arr = js_sys::Array::of1(&json.into());
+            if let Ok(blob) = web_sys::Blob::new_with_str_sequence(&arr)
+                && let Ok(url) = web_sys::Url::create_object_url_with_blob(&blob)
+                && let Some(doc) = window.document()
+                && let Ok(anchor) = doc.create_element("a")
+                && let Ok(anchor) = anchor.dyn_into::<web_sys::HtmlAnchorElement>()
+            {
+                anchor.set_href(&url);
+                anchor.set_download(&filename);
+                anchor.click();
+                web_sys::Url::revoke_object_url(&url).ok();
+            }
+        }
+    });
+
+    let cards_view = move || {
+        let pid = plan_id.get();
+        let plan = store.get_plan(&pid);
+        match plan {
+            None => view! { <div class="not-found"><div class="container"><p>"Plan not found."</p><button class="btn btn-primary" on:click=move |ev| go_back.run(ev)>"Go back"</button></div></div> }.into_any(),
+            Some(p) => {
+                let topic = p.topic.clone();
+                let goal = p.goal.clone();
+                let pid_for_cards = pid.clone();
+                view! {
+                    <div class="plan-overview">
+                        <div class="container">
+                            <div class="plan-header">
+                                <button class="btn-ghost" on:click=move |ev| go_back.run(ev)>
+                                    <ArrowLeft size=18 />
+                                    "Back"
+                                </button>
+                                <div class="plan-actions">
+                                    <button class="btn-icon" aria-label="Export plan" on:click=move |ev| export.run(ev)>
+                                        <Download size=18 />
+                                    </button>
+                                    <button class="btn-icon" aria-label="Delete plan" on:click=move |ev| delete.run(ev)>
+                                        <Trash2 size=18 />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="plan-title-section">
+                                <h1>{topic.clone()}</h1>
+                                <Show when={ let g = goal.clone(); move || !g.is_empty() } fallback=|| ()>
+                                    <p class="plan-goal">{goal.clone()}</p>
+                                </Show>
+                                <div class="plan-progress">
+                                    <div class="progress-bar">
+                                        <div
+                                            class="progress-bar-fill"
+                                            style=move || format!("width: {}%", progress.get())
+                                        ></div>
+                                    </div>
+                                    <span class="progress-text">{move || format!("{}% complete", progress.get())}</span>
+                                </div>
+                            </div>
+
+                            <div class="principles-grid">
+                                <For
+                                    each=move || principles().to_vec()
+                                    key=|pr| pr.id
+                                    children=move |pr| {
+                                        let id = pr.id;
+                                        let color = pr.color.clone();
+                                        let name = pr.name.clone();
+                                        let tagline = pr.tagline.clone();
+                                        let pid_inner = pid_for_cards.clone();
+                                        let c = color.as_str();
+                                        let pr_progress = store.get_principle_progress(&pid_inner, id);
+                                        let is_completed = store
+                                            .get_plan(&pid_inner)
+                                            .and_then(|pl| {
+                                                pl.principles
+                                                    .iter()
+                                                    .find(|x| x.principle_id == id)
+                                                    .map(|c| c.completed)
+                                            })
+                                            .unwrap_or(false);
+                                        let plan_id_for_click = plan_id;
+                                        view! {
+                                            <button class="principle-card" on:click=move |_| {
+                                                let id_txt = plan_id_for_click.get_untracked();
+                                                navigate.with_value(|n| n(&format!("/plan/{id_txt}/principle/{id}"), NavigateOptions::default()));
+                                            }>
+                                                <div class="principle-accent" style=format!("background: {c};")></div>
+                                                <div class="principle-card-body">
+                                                    <div class="principle-card-top">
+                                                        <div class="principle-badge" style=format!("background: {c};")>
+                                                            {id}
+                                                        </div>
+                                                        <Show
+                                                            when=move || is_completed
+                                                            fallback=|| view! { <Circle size=20 color="var(--color-mute)".to_string() /> }
+                                                        >
+                                                            <CheckCircle2 size=20 color="var(--color-success)".to_string() />
+                                                        </Show>
+                                                    </div>
+                                                    <h3 class="principle-card-title">{name}</h3>
+                                                    <p class="principle-card-tagline">{tagline}</p>
+                                                    <div class="principle-card-progress">
+                                                        <div class="progress-bar">
+                                                            <div
+                                                                class="progress-bar-fill"
+                                                                style=format!("width: {pr_progress}%; background: {c};")
+                                                            ></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        }
+                                    }
+                                />
+                            </div>
+                        </div>
+                    </div>
+                }
+                .into_any()
+            }
+        }
+    };
+
+    view! { {cards_view} }
+}

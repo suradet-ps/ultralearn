@@ -1,0 +1,81 @@
+[package]
+name = "ultralearn"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+leptos = { version = "0.8", default-features = false, features = ["csr"] }
+leptos_meta = { version = "0.8", default-features = false }
+leptos_router = { version = "0.8", default-features = false }
+
+# HTTP / DOM
+gloo-storage = { version = "0.4", default-features = false }
+gloo-utils = { version = "0.2", default-features = false, features = ["serde"] }
+
+# Serialization
+serde = { version = "1", default-features = false, features = ["derive", "std"] }
+serde_json = { version = "1", default-features = false, features = ["std"] }
+
+# Time / IDs  (NOTE the wasm-specific features)
+chrono = { version = "0.4", default-features = false, features = ["clock", "std", "wasmbind"] }
+web-time = { version = "1", default-features = false, features = ["serde"] }
+
+# Logging / panics
+console_log = { version = "1", default-features = false }
+console_error_panic_hook = { version = "0.1", default-features = false }
+log = { version = "0.4", default-features = false }
+
+# Errors
+thiserror = { version = "2", default-features = false }
+
+# JS interop
+wasm-bindgen = { version = "0.2", default-features = false, features = ["std"] }
+wasm-bindgen-futures = { version = "0.4", default-features = false }
+js-sys = { version = "0.3", default-features = false }
+web-sys = { version = "0.3", default-features = false, features = [
+  "Window", "Document", "HtmlElement", "HtmlInputElement", "HtmlTextAreaElement",
+  "HtmlSelectElement", "HtmlAnchorElement", "Element", "Node", "console", "Storage",
+  "Location", "Blob", "Url", "Event", "EventTarget", "MouseEvent", "SubmitEvent",
+  "UrlSearchParams",
+] }
+
+[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
+wasm-bindgen-test = { version = "0.3", default-features = false }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.dev]
+opt-level = 1
+debug = true
+incremental = true
+
+[lints.rust]
+unsafe_code = "deny"
+unused_must_use = "deny"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+# Leptos view! macros are noisy — relax the pedantic UI lints:
+module_name_repetitions = "allow"
+missing_errors_doc = "allow"
+must_use_candidate = "allow"
+too_many_lines = "allow"
+too_many_arguments = "allow"
+needless_pass_by_value = "allow"
+future_not_send = "allow"
+# Numeric casts are intentional (time math, percentages) and safe in this app:
+cast_possible_truncation = "allow"
+cast_sign_loss = "allow"
+cast_precision_loss = "allow"
+cast_possible_wrap = "allow"
+missing_panics_doc = "allow"

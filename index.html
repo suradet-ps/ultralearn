@@ -1,15 +1,18 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ultralearn</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link data-trunk rel="icon" type="image/svg+xml" href="public/favicon.svg" />
+
+    <!-- App styles: Trunk copies + hashes these into dist/ -->
+    <link data-trunk rel="css" href="public/styles/main.css" />
+    <link data-trunk rel="css" href="public/styles/components.css" />
+
+    <!-- WASM entry point. data-wasm-opt="0" avoids Windows/Rust wasm-opt breakage -->
+    <link data-trunk rel="rust" data-weak-refs data-wasm-opt="0" />
   </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+  <body></body>
 </html>
