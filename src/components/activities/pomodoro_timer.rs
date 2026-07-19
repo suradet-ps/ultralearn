@@ -1,5 +1,6 @@
 use crate::components::icons::{Pause, Play, RotateCcw};
 use crate::composables::{TimerMode, use_timer};
+use crate::core::time::format_datetime_short;
 use leptos::prelude::*;
 
 fn fmt(seconds: u32) -> String {
@@ -9,8 +10,8 @@ fn fmt(seconds: u32) -> String {
 }
 
 #[component]
-pub fn PomodoroTimer() -> impl IntoView {
-    let timer = use_timer();
+pub fn PomodoroTimer(plan_id: String) -> impl IntoView {
+    let timer = use_timer(plan_id);
     let modes = [TimerMode::Work, TimerMode::ShortBreak, TimerMode::LongBreak];
 
     view! {
@@ -55,6 +56,30 @@ pub fn PomodoroTimer() -> impl IntoView {
                 </button>
             </div>
             <div class="sessions">"Sessions completed: " {move || timer.sessions.get()}</div>
+
+            <Show
+                when=move || !timer.history.get().is_empty()
+                fallback=|| ()
+            >
+                <div class="session-history">
+                    <h4>"Recent focus sessions"</h4>
+                    <ul>
+                        <For
+                            each=move || timer.history.get()
+                            key=|s| s.id.clone()
+                            children=move |s| {
+                                let mins = s.duration_secs / 60;
+                                view! {
+                                    <li>
+                                        <span class="session-date">{format_datetime_short(&s.finished_at)}</span>
+                                        <span class="session-dur">{format!("{mins} min")}</span>
+                                    </li>
+                                }
+                            }
+                        />
+                    </ul>
+                </div>
+            </Show>
         </div>
     }
 }

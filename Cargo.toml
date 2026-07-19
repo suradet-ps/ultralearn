@@ -20,6 +20,9 @@ gloo-utils = { version = "0.2", default-features = false, features = ["serde"] }
 serde = { version = "1", default-features = false, features = ["derive", "std"] }
 serde_json = { version = "1", default-features = false, features = ["std"] }
 
+# Markdown rendering for notes (pure-Rust, safe by construction — no HTML/JS execution)
+pulldown-cmark = { version = "0.12", default-features = false, features = ["html"] }
+
 # Time / IDs  (NOTE the wasm-specific features)
 chrono = { version = "0.4", default-features = false, features = ["clock", "std", "wasmbind"] }
 web-time = { version = "1", default-features = false, features = ["serde"] }
@@ -40,7 +43,7 @@ web-sys = { version = "0.3", default-features = false, features = [
   "Window", "Document", "HtmlElement", "HtmlInputElement", "HtmlTextAreaElement",
   "HtmlSelectElement", "HtmlAnchorElement", "Element", "Node", "console", "Storage",
   "Location", "Blob", "Url", "Event", "EventTarget", "MouseEvent", "SubmitEvent",
-  "UrlSearchParams",
+  "UrlSearchParams", "Navigator", "ServiceWorkerContainer",
 ] }
 
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies]

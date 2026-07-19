@@ -1,7 +1,9 @@
-use crate::core::time::{date_plus_days, generate_id, now_iso};
+use crate::core::time::{
+    date_only, date_plus_days, days_between, generate_id, now_date_only, now_iso,
+};
 use crate::core::types::{
     ActivityValue, ChecklistItem, Experiment, ExperimentStatus, FeedbackEntry, FeedbackType,
-    Flashcard, Plan, PrincipleProgress, RetentionSchedule,
+    Flashcard, FocusSession, Plan, PrincipleProgress, RetentionSchedule,
 };
 use leptos::prelude::*;
 use std::sync::OnceLock;
@@ -34,6 +36,8 @@ impl PlanState {
             topic: topic.to_string(),
             goal: goal.to_string(),
             created_at: now_iso(),
+            tags: Vec::new(),
+            focus_sessions: Vec::new(),
             principles: create_default_progress(),
         };
         let mut plans = self.plans.get_untracked();
@@ -41,6 +45,109 @@ impl PlanState {
         self.plans.set(plans);
         save_plans(&self.plans.get_untracked());
         plan
+    }
+
+    pub fn rename_plan(&self, id: &str, topic: &str) {
+        self.mutate_plan(id, |p| {
+            p.topic = topic.to_string();
+        });
+    }
+
+    pub fn update_plan_goal(&self, id: &str, goal: &str) {
+        self.mutate_plan(id, |p| {
+            p.goal = goal.to_string();
+        });
+    }
+
+    pub fn add_tag(&self, id: &str, tag: &str) {
+        let tag = tag.trim().to_string();
+        if tag.is_empty() {
+            return;
+        }
+        self.mutate_plan(id, |p| {
+            if !p.tags.iter().any(|t| t.eq_ignore_ascii_case(&tag)) {
+                p.tags.push(tag);
+            }
+        });
+    }
+
+    pub fn remove_tag(&self, id: &str, tag: &str) {
+        self.mutate_plan(id, |p| {
+            p.tags.retain(|t| t != tag);
+        });
+    }
+
+    /// Duplicate a plan as a fresh local-first copy ("start a new plan from my
+    /// old one"). Checklist checked-state, notes, and activities reset; the
+    /// structure (principles + prompt checklists) is preserved.
+    pub fn duplicate_plan(&self, id: &str) -> Option<Plan> {
+        let source = self.get_plan(id)?;
+        let mut new_plan = Plan {
+            id: generate_id(),
+            topic: format!("{} (copy)", source.topic),
+            goal: source.goal.clone(),
+            created_at: now_iso(),
+            tags: source.tags.clone(),
+            focus_sessions: Vec::new(),
+            principles: source
+                .principles
+                .iter()
+                .map(|pp| PrincipleProgress {
+                    principle_id: pp.principle_id,
+                    notes: String::new(),
+                    checklist: pp
+                        .checklist
+                        .iter()
+                        .map(|c| ChecklistItem {
+                            id: generate_id(),
+                            text: c.text.clone(),
+                            checked: false,
+                        })
+                        .collect(),
+                    activities: std::collections::HashMap::new(),
+                    completed: false,
+                })
+                .collect(),
+        };
+        new_plan.id = generate_id();
+        let mut plans = self.plans.get_untracked();
+        plans.push(new_plan.clone());
+        self.plans.set(plans);
+        save_plans(&self.plans.get_untracked());
+        Some(new_plan)
+    }
+
+    pub fn record_focus_session(&self, plan_id: &str, duration_secs: u32) {
+        let session = FocusSession {
+            id: generate_id(),
+            finished_at: now_iso(),
+            duration_secs,
+        };
+        self.mutate_plan(plan_id, |p| {
+            p.focus_sessions.push(session);
+        });
+    }
+
+    pub fn get_focus_sessions(&self, plan_id: &str) -> Vec<FocusSession> {
+        self.get_plan(plan_id)
+            .map(|p| p.focus_sessions.clone())
+            .unwrap_or_default()
+    }
+
+    /// Number of distinct days with a completed focus session in the last 7 days.
+    pub fn focus_streak(&self, plan_id: &str) -> u32 {
+        let today = now_date_only();
+        let sessions = self.get_focus_sessions(plan_id);
+        let mut days = std::collections::HashSet::new();
+        for s in &sessions {
+            if let Some(day) = date_only(&s.finished_at)
+                && let Some(diff) = days_between(&day, &today)
+                && (0..7).contains(&diff)
+            {
+                days.insert(day);
+            }
+        }
+        days.len() as u32
     }
 
     pub fn delete_plan(&self, id: &str) {
@@ -324,6 +431,21 @@ impl PlanState {
     }
 
     // ---- internal helpers ----
+
+    fn mutate_plan<F>(&self, plan_id: &str, f: F)
+    where
+        F: FnOnce(&mut Plan),
+    {
+        let mut plans = self.plans.get_untracked();
+        for plan in &mut plans {
+            if plan.id == plan_id {
+                f(plan);
+                break;
+            }
+        }
+        self.plans.set(plans);
+        save_plans(&self.plans.get_untracked());
+    }
 
     fn find_progress(&self, plan_id: &str, principle_id: u32) -> Option<PrincipleProgress> {
         self.get_plan(plan_id).and_then(|p| {

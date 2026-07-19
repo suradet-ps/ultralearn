@@ -103,7 +103,7 @@ pub fn PrincipleDetail() -> impl IntoView {
                             <div class="detail-body">
                                 <div class="detail-main">
                                     <Show when=move || pid == 2 fallback=|| ()>
-                                        <PomodoroTimer />
+                                        <PomodoroTimer plan_id=plan_id.get() />
                                     </Show>
                                     <Show when=move || pid == 5 fallback=|| ()>
                                         <FlashcardSection plan_id=plan_id.get() principle_id=pid />
@@ -143,6 +143,30 @@ pub fn PrincipleDetail() -> impl IntoView {
             }
         }
     };
+
+    // Keyboard shortcuts: `c` toggles complete, `b`/`Escape` goes back.
+    let go_back_kb = go_back;
+    let toggle_kb = toggle;
+    Effect::new(move |_| {
+        let go_back_kb = go_back_kb;
+        let toggle_kb = toggle_kb;
+        window_event_listener(leptos::ev::keydown, move |ev: leptos::ev::KeyboardEvent| {
+            if crate::core::utils::is_typing(&ev) {
+                return;
+            }
+            match ev.key().as_str() {
+                "c" => {
+                    ev.prevent_default();
+                    toggle_kb.run(web_sys::MouseEvent::new("click").unwrap());
+                }
+                "b" | "Escape" => {
+                    ev.prevent_default();
+                    go_back_kb.run(web_sys::MouseEvent::new("click").unwrap());
+                }
+                _ => {}
+            }
+        });
+    });
 
     view! { {body} }
 }

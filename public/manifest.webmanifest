@@ -1,0 +1,19 @@
+﻿{
+  "name": "Ultralearn",
+  "short_name": "Ultralearn",
+  "description": "A private, offline-capable study companion for structured self-directed learning.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

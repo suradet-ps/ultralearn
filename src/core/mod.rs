@@ -1,4 +1,5 @@
 pub mod error;
+pub mod sanitize;
 pub mod theme;
 pub mod time;
 pub mod types;

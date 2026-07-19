@@ -27,4 +27,14 @@ pub fn start() {
         crate::stores::plan::install();
         view! { <App /> }
     });
+
+    register_service_worker();
+}
+
+/// Register the offline service worker (no-op if unsupported or on file://).
+fn register_service_worker() {
+    if let Some(window) = web_sys::window() {
+        let container = window.navigator().service_worker();
+        let _ = container.register("/sw.js");
+    }
 }

@@ -1,4 +1,4 @@
-use crate::components::icons::{ArrowRight, Sparkles};
+use crate::components::icons::{ArrowRight, Search, Sparkles};
 use crate::core::types::principles_data::principle_name;
 use crate::stores::use_plan;
 use leptos::prelude::*;
@@ -8,7 +8,11 @@ use leptos_router::hooks::use_navigate;
 pub fn LandingView() -> impl IntoView {
     let topic = RwSignal::new(String::new());
     let goal = RwSignal::new(String::new());
-    let navigate = use_navigate();
+    let navigate = StoredValue::new(use_navigate());
+    let store = use_plan();
+
+    let search = RwSignal::new(String::new());
+    let active_tag = RwSignal::new(String::new());
 
     let examples = [
         "Rust Programming",
@@ -24,12 +28,46 @@ pub fn LandingView() -> impl IntoView {
         if t.trim().is_empty() {
             return;
         }
-        let store = use_plan();
         let plan = store.create_plan(t.trim(), goal.get_untracked().trim());
-        navigate(
-            &format!("/plan/{}", plan.id),
-            leptos_router::NavigateOptions::default(),
-        );
+        let id = plan.id.clone();
+        navigate.with_value(|n| {
+            n(
+                &format!("/plan/{id}"),
+                leptos_router::NavigateOptions::default(),
+            );
+        });
+    });
+
+    // All tags across plans, for the filter chips.
+    let all_tags = Signal::derive(move || {
+        let mut tags: Vec<String> = store
+            .plans
+            .get()
+            .iter()
+            .flat_map(|p| p.tags.iter().cloned())
+            .collect();
+        tags.sort();
+        tags.dedup();
+        tags
+    });
+
+    // Plans filtered by the search box and the active tag chip.
+    let filtered_plans = Signal::derive(move || {
+        let q = search.get().trim().to_lowercase();
+        let tag = active_tag.get();
+        store
+            .plans
+            .get()
+            .into_iter()
+            .filter(|p| {
+                let matches_q = q.is_empty()
+                    || p.topic.to_lowercase().contains(&q)
+                    || p.goal.to_lowercase().contains(&q)
+                    || p.tags.iter().any(|t| t.to_lowercase().contains(&q));
+                let matches_tag = tag.is_empty() || p.tags.contains(&tag);
+                matches_q && matches_tag
+            })
+            .collect::<Vec<_>>()
     });
 
     view! {
@@ -99,6 +137,139 @@ pub fn LandingView() -> impl IntoView {
                             }
                         />
                     </div>
+                </div>
+            </section>
+
+            <section class="plan-library">
+                <div class="container">
+                    <h2 class="section-title">"Your Plans"</h2>
+                    <p class="section-subtitle">
+                        "Pick up where you left off, or start something new."
+                    </p>
+
+                    <div class="plan-library-controls">
+                        <div class="search-box">
+                            <Search size=18 />
+                            <input
+                                type="text"
+                                placeholder="Search plans by topic, goal, or tag..."
+                                prop:value=move || search.get()
+                                on:input=move |ev| search.set(event_target_value(&ev))
+                                aria-label="Search plans"
+                            />
+                        </div>
+                    </div>
+
+                    <Show
+                        when=move || !all_tags.get().is_empty()
+                        fallback=|| ()
+                    >
+                        <div class="tag-filters">
+                            <button
+                                class="tag-chip"
+                                class:active=move || active_tag.get().is_empty()
+                                on:click=move |_| active_tag.set(String::new())
+                            >
+                                "All"
+                            </button>
+                            <For
+                                each=move || all_tags.get()
+                                key=|t| t.clone()
+                                children=move |t| {
+                                    let t2 = t.clone();
+                                    view! {
+                                        <button
+                                            class="tag-chip"
+                                            class:active=move || active_tag.get() == t
+                                            on:click=move |_| {
+                                                let cur = active_tag.get_untracked();
+                                                if cur == t2 {
+                                                    active_tag.set(String::new());
+                                                } else {
+                                                    active_tag.set(t2.clone());
+                                                }
+                                            }
+                                                            >
+                                                                {t.clone()}
+                                                            </button>
+                                    }
+                                }
+                            />
+                        </div>
+                    </Show>
+
+                    <Show
+                        when=move || !store.plans.get().is_empty()
+                        fallback=|| view! {
+                            <div class="empty">
+                                "No plans yet. Create your first one above."
+                            </div>
+                        }
+                    >
+                        <div class="plan-list">
+                            <For
+                                each=move || filtered_plans.get()
+                                key=|p| p.id.clone()
+                                children=move |p| {
+                                    let id = p.id.clone();
+                                    let topic = p.topic.clone();
+                                    let progress = store.get_progress(&p.id);
+                                    let tags_for_show = p.tags.clone();
+                                    let tags_for_for = p.tags.clone();
+                                    let navigate_inner = navigate;
+                                    view! {
+                                        <button
+                                            class="plan-list-item"
+                                            on:click=move |_| {
+                                                navigate_inner.with_value(|n| {
+                                                    n(
+                                                        &format!("/plan/{id}"),
+                                                        leptos_router::NavigateOptions::default(),
+                                                    );
+                                                });
+                                            }
+                                        >
+                                            <div class="plan-list-main">
+                                                <div class="plan-list-topic">{topic}</div>
+                                                <Show when=move || !tags_for_show.is_empty() fallback=|| ()>
+                                                    <div class="plan-list-tags">
+                                                        {{
+                                                            let tf = tags_for_for.clone();
+                                                            view! {
+                                                                <For
+                                                                    each=move || tf.clone()
+                                                                    key=|t| t.clone()
+                                                                    children=move |t| {
+                                                                        view! { <span class="tag-chip static">{t}</span> }
+                                                                    }
+                                                                />
+                                                            }
+                                                        }}
+                                                    </div>
+                                                </Show>
+                                            </div>
+                                            <div class="plan-list-progress">
+                                                <div class="progress-bar">
+                                                    <div
+                                                        class="progress-bar-fill"
+                                                        style=move || format!("width: {progress}%")
+                                                    ></div>
+                                                </div>
+                                                <span class="progress-text">{progress}"%"</span>
+                                            </div>
+                                        </button>
+                                    }
+                                }
+                            />
+                        </div>
+                        <Show
+                            when=move || !store.plans.get().is_empty()
+                                && filtered_plans.get().is_empty()
+                            fallback=|| ()
+                        >
+                            <div class="empty">"No plans match your search."</div>
+                        </Show>
+                    </Show>
                 </div>
             </section>
 

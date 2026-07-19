@@ -16,7 +16,20 @@ pub struct Plan {
     pub topic: String,
     pub goal: String,
     pub created_at: String,
+    pub tags: Vec<String>,
+    pub focus_sessions: Vec<FocusSession>,
     pub principles: Vec<PrincipleProgress>,
+}
+
+/// A single completed focus session, recorded by the Pomodoro timer so the
+/// learner can see a "focus this week" streak. Stored per-plan.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FocusSession {
+    pub id: String,
+    /// ISO-8601 timestamp of when the session finished.
+    pub finished_at: String,
+    /// Focus duration in seconds (the Work interval length).
+    pub duration_secs: u32,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
