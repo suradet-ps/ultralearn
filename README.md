@@ -1,140 +1,142 @@
-<div align="center">
-
 # Ultralearn
 
-**Build structured, self-directed learning plans grounded in the 9 Ultralearning principles.**
-
-[![CI](https://github.com/suradet-ps/ultralearn/actions/workflows/ci.yml/badge.svg)](https://github.com/suradet-ps/ultralearn/actions/workflows/ci.yml)
-[![Rust](https://img.shields.io/badge/Rust-1.97-000000?logo=rust&logoColor=white)](https://www.rust-lang.org/)
-[![Leptos](https://img.shields.io/badge/Leptos-0.8-dea584?logo=rust&logoColor=white)](https://leptos.dev/)
-[![Trunk](https://img.shields.io/badge/Trunk-WASM-ff69b4)](https://trunkrs.dev/)
-[![License](https://img.shields.io/badge/license-MIT-4b32c3)](LICENSE)
-
-</div>
-
----
-
-> Turn any topic — *"Learn Rust"*, *"Play guitar"*, *"Japanese"* — into a guided plan organized around the nine ultralearning principles from [Scott Young](https://www.scotthyoung.com/blog/the-ultralearning-book/).
-
-Ultralearn is a fully client-side web app compiled to WebAssembly with [Leptos](https://leptos.dev/). Enter a topic, and it scaffolds a plan across all 9 principles. Track notes, checklists, flashcards, feedback logs, experiments, and spaced-repetition schedules per principle, and watch your progress compound.
-
-Everything runs in the browser. There is **no backend and no account** — your plans are stored locally in `localStorage` and can be exported or imported as JSON.
-
----
-
-## Features
-
-| | |
-|---|---|
-| 🧭 **Plan generator** | Enter a topic and an optional goal to scaffold a plan across all 9 principles. |
-| 📚 **9 principles** | Metalearning, Focus, Directness, Drill, Retrieval, Feedback, Retention, Intuition, Experimentation. |
-| ✅ **Checklists & notes** | Per-principle prompts, custom checklists, and free-form notes. |
-| 🃏 **Flashcards** | Create retrieval practice cards for any principle. |
-| 📝 **Feedback log** | Capture outcome / informational / corrective feedback. |
-| 🧪 **Experiments** | Track learning hypotheses, methods, and results. |
-| 🗓️ **Retention schedules** | Spaced-repetition reminders (1/3/7/14/30-day intervals). |
-| 📊 **Progress tracking** | Per-principle and overall completion percentages. |
-| 🌗 **Dark mode** | Theme toggle persisted to `localStorage`. |
-| 💾 **Export / Import** | Backup or share plans as JSON. |
-
----
-
-## Tech Stack
-
-- **[Rust](https://www.rust-lang.org/)** (edition 2024, `1.97+`) compiled to `wasm32-unknown-unknown`
-- **[Leptos](https://leptos.dev/)** `0.8` — reactive UI (`csr` mode)
-- **[leptos_meta](https://docs.rs/leptos_meta)** — document head / title
-- **[leptos_router](https://docs.rs/leptos_router)** — client-side routing
-- **[Trunk](https://trunkrs.dev/)** — WASM bundler & dev server
-- **[gloo-storage](https://docs.rs/gloo-storage)** — `localStorage` persistence
-- **[serde](https://serde.rs/)** / **[chrono](https://docs.rs/chrono)** — (de)serialization & dates
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- [Rust](https://www.rust-lang.org/tools/install) (stable, `1.97+`) with the `wasm32-unknown-unknown` target
-- [Trunk](https://trunkrs.dev/#install)
-
-```bash
-rustup target add wasm32-unknown-unknown
-cargo install --locked trunk
 ```
-
-### Development
-
-Start the Trunk dev server with hot reload:
-
-```bash
-trunk serve
-```
-
-The app is served at `http://127.0.0.1:3000` by default.
-
-### Production Build
-
-```bash
-trunk build --release
-```
-
-Static output is written to `dist/` and can be served by any static host.
-
-### Preview the Build
-
-```bash
-trunk serve --release
+██╗   ██╗██╗     ████████╗██████╗  █████╗ ██╗     ███████╗ █████╗ ██████╗ ███╗   ██╗
+██║   ██║██║     ╚══██╔══╝██╔══██╗██╔══██╗██║     ██╔════╝██╔══██╗██╔══██╗████╗  ██║
+██║   ██║██║        ██║   ██████╔╝███████║██║     █████╗  ███████║██████╔╝██╔██╗ ██║
+██║   ██║██║        ██║   ██╔══██╗██╔══██║██║     ██╔══╝  ██╔══██║██╔══██╗██║╚██╗██║
+╚██████╔╝███████╗   ██║   ██║  ██║██║  ██║███████╗███████╗██║  ██║██║  ██║██║ ╚████║
+ ╚═════╝ ╚══════╝   ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
 ```
 
 ---
 
-## Project Structure
+## ◆ PULSE
 
-```text
-ultralearn/
-├── .github/workflows/ci.yml   # CI: fmt, clippy, check, test, trunk build
-├── public/                    # Static assets (favicon, styles)
-├── src/
-│   ├── app.rs                 # Root component (router + shell)
-│   ├── lib.rs                 # wasm-bindgen entry point
-│   ├── components/            # UI components (layout, icons, activities)
-│   ├── composables/           # Reusable logic (timers, etc.)
-│   ├── core/                  # Framework-agnostic logic (types, theme, time)
-│   ├── stores/                # Reactive plan state (OnceLock singletons)
-│   └── views/                 # Route-level pages
-├── index.html                 # Trunk entry point
-├── Cargo.toml
-├── Trunk.toml
-└── rust-toolchain.toml
+"Learn Rust", "play guitar", "Japanese" - a topic is not a plan, and a
+plan is where ultralearning begins. Ultralearn scaffolds any topic into
+a guided structure across Scott Young's nine principles -
+metalearning, focus, directness, drill, retrieval, feedback, retention,
+intuition, experimentation - each with its own checklists, notes,
+flashcards, feedback logs, experiments, and retention schedule. All
+client-side, all local, no account, no backend: the plan is yours, the
+data is yours, and the compounding is yours to watch.
+
+| P0 ▣ | P1 ▢ | P2-P9 ☐ |
+|---|---|---|
+
+*The foundation and nearly all of the core experience are sealed; real
+spaced repetition (FSRS), adaptive plans, sync, and the v1.0 gate
+stand open.*
+
+> Built with Rust 2024 + Leptos 0.8, kept in `localStorage`, exported
+> as JSON - a learning OS with no landlord.
+>
+> **suradet-ps**, artifact keeper
+
+---
+
+## ◆ IGNITION
+
+One target, one tool, one command.
+
+```
+⟫ rustup target add wasm32-unknown-unknown
+⟫ cargo install --locked trunk
+⟫ trunk serve
 ```
 
----
+Open [http://127.0.0.1:3000](http://127.0.0.1:3000).
 
-## Data & Privacy
+The release artifact: `⟫ trunk build --release` - static output in
+`dist/`, served by any static host.
 
-Ultralearn is fully client-side. All plans, notes, and progress live in your browser's `localStorage` under the key `ultralearn-plans` (and theme preference under `ultralearn-theme`). Clearing your browser data removes your plans — use **Export** in a plan to back up as JSON.
+<details>
+<summary>Prerequisites</summary>
 
----
+- [Rust](https://www.rust-lang.org/tools/install) (stable, 1.97+)
+  with the `wasm32-unknown-unknown` target
+- [Trunk](https://trunkrs.dev/#install) - installed above
 
-## Continuous Integration
-
-GitHub Actions runs on every push and pull request to `main`. The workflow checks formatting (`cargo fmt`), lints (`cargo clippy` for `wasm32`), type-checks (`cargo check`), runs tests (`cargo test`), and produces a production build with Trunk. See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
-
----
-
-## Scripts
-
-| Command | Description |
-| --- | --- |
-| `trunk serve` | Start the development server with hot reload. |
-| `trunk build --release` | Build the optimized WASM app to `dist/`. |
-| `cargo fmt --all --check` | Verify code formatting. |
-| `cargo clippy --target wasm32-unknown-unknown` | Lint the app. |
-| `cargo test` | Run unit tests. |
+</details>
 
 ---
 
-## License
+## ◆ ANATOMY
+
+One store, nine principles, a set of honest activities.
+
+- **Generates** - a topic plus an optional goal scaffolds all nine
+  principles at once; every principle arrives with its prompts and its
+  own working space.
+- **Tracks** - per-principle checklists, free-form notes, and the
+  completion percentages - the overview shows where the plan stands,
+  the principle page shows why.
+- **Practices** - flashcards for retrieval, a feedback log that names
+  the kind of feedback (outcome, informational, corrective), an
+  experiment tracker for hypotheses and results, a Feynman workspace,
+  and a Pomodoro timer with a focus-streak indicator.
+- **Schedules** - retention reminders at 1/3/7/14/30-day intervals;
+  the honest fixed calendar of today, with FSRS waiting in Phase 2.
+- **Remembers** - everything persists under `ultralearn-plans` in
+  `localStorage`; export and import carry the plan between machines as
+  JSON. Clearing the browser clears the plans - export is the backup
+  ritual.
+- **Wears** - dark or light, persisted; installable offline through
+  the web app manifest and service worker.
+
+---
+
+## ◆ RITUALS
+
+**The core ceremony** - the new plan:
+
+1. Enter the topic - "Learn Rust" - and an optional goal.
+2. The generator scaffolds all nine principles; the plan is born
+   complete, not blank.
+3. Work the principle pages: checklists, notes, flashcards, feedback,
+   experiments - the day's practice lands where it belongs.
+4. Review the retention schedule and watch the percentages move; the
+   plan compounds because the work was structured.
+
+**The ceremony of the local page** - no backend, no account, no
+telemetry. The plan lives in the browser and leaves it only when the
+JSON export says so.
+
+**The ceremony of the keyboard** - digits 1-9 jump to a principle, `c`
+toggles complete, `b` or `Esc` goes back - and the shortcuts stand
+down while you type. The page stays out of the way of the practice.
+
+---
+
+## ◆ ECHOES
+
+**Where this artifact is heading**
+
+```
+P0 ▸ foundation: scaffold, storage, nine principles, CI ────────────── ▸ sealed
+P1 ▸ core experience: edit, tags, markdown, a11y, offline ──────────── ▸ forging
+P2 ▸ real spaced repetition (FSRS) ──────────────────────────────────── ▸ open
+P3 ▸ adaptive plans - the app learns with you ───────────────────────── ▸ open
+P4-P8 ▸ interop, sync, commons, hardening, i18n ─────────────────────── ▸ open
+P9 ▸ v1.0.0 stable release ──────────────────────────────────────────── ▸ open
+```
+
+**Raising the artifact** - the honest path lives in `ROADMAP.md`.
+Gates before any PR: `cargo fmt --all --check`, `cargo clippy
+--target wasm32-unknown-unknown`, `cargo test`, and the Trunk
+production build. Open an issue first to discuss a change.
+
+**Status** - CI runs the full gate on every push and PR.
+[Watch the gates](.github/workflows).
+
+---
+
+```
+  ─────────────────────────────────────────
+   A topic is a wish.
+   A plan is the first day of the work.
+  ─────────────────────────────────────────
+```
 
 Licensed under the [MIT License](LICENSE).
