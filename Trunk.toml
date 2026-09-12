@@ -3,7 +3,7 @@ target = "index.html"
 release = true
 dist = "dist"
 public_url = "/"
-filehash = false
+filehash = true
 minify = "on_release"
 
 [serve]

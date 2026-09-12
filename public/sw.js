@@ -4,8 +4,8 @@
 // Guarded so that if this file is ever injected as a normal page script
 // (e.g. by a bundler), it is a harmless no-op.
 if (typeof ServiceWorkerGlobalScope !== "undefined" && self instanceof ServiceWorkerGlobalScope) {
-  const CACHE = "ultralearn-v1";
-  const SHELL = ["/", "/index.html", "/favicon.svg", "/manifest.webmanifest"];
+  const CACHE = "ultralearn-v2";
+  const SHELL = ["/", "/index.html", "/manifest.webmanifest"];
 
   self.addEventListener("install", (event) => {
     event.waitUntil(
