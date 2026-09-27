@@ -1,13 +1,11 @@
 # Ultralearn
 
-```
-██╗   ██╗██╗     ████████╗██████╗  █████╗ ██╗     ███████╗ █████╗ ██████╗ ███╗   ██╗
-██║   ██║██║     ╚══██╔══╝██╔══██╗██╔══██╗██║     ██╔════╝██╔══██╗██╔══██╗████╗  ██║
-██║   ██║██║        ██║   ██████╔╝███████║██║     █████╗  ███████║██████╔╝██╔██╗ ██║
-██║   ██║██║        ██║   ██╔══██╗██╔══██║██║     ██╔══╝  ██╔══██║██╔══██╗██║╚██╗██║
-╚██████╔╝███████╗   ██║   ██║  ██║██║  ██║███████╗███████╗██║  ██║██║  ██║██║ ╚████║
- ╚═════╝ ╚══════╝   ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
-```
+[![CI](https://github.com/suradet-ps/ultralearn/actions/workflows/ci.yml/badge.svg)](https://github.com/suradet-ps/ultralearn/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Rust: stable](https://img.shields.io/badge/rust-stable-orange.svg?logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![Leptos v0.8](https://img.shields.io/badge/Leptos-v0.8-blue.svg)](https://leptos.dev)
+[![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8.svg?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/suradet-ps/ultralearn/issues)
 
 ---
 
